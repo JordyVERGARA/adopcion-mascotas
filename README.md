@@ -8,10 +8,11 @@ Flujo completo: **formulario en React → petición HTTP → API en Express → 
 
 | Integrante | Responsabilidad |
 |---|---|
-| German Riera Rebolledo | |
-| Nombre 2 | |
-| Nombre 3 | |
-| Nombre 4 | |
+| German Steven Riera Rebolledo | |
+| Jordy Rodrigo Vergara Morales | |
+| Anthony Steven Pataron Naula| |
+| Héctor Guillermo Tenelema Iza
+  | |
 
 ## Tecnologías
 
