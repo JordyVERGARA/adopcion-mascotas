@@ -12,7 +12,6 @@ Flujo completo: **formulario en React → petición HTTP → API en Express → 
 | Jordy Rodrigo Vergara Morales | |
 | Anthony Steven Pataron Naula| |
 | Héctor Guillermo Tenelema Iza
-  | |
 
 ## Tecnologías
 
