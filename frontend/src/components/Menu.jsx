@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom';
 
-// Menú de navegación reutilizable (aparece en todas las páginas)
 function Menu() {
   return (
     <header className="menu">

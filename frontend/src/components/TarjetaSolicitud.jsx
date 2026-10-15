@@ -1,7 +1,5 @@
-// Ícono según la especie
 const ICONOS = { Perro: '🐶', Gato: '🐱', Conejo: '🐰', Ave: '🐦', Otro: '🐾' };
 
-// "2026-10-20" → "20 de octubre de 2026" (sin desfase de zona horaria)
 function formatearFecha(fecha) {
   return new Date(`${fecha}T00:00:00`).toLocaleDateString('es-EC', {
     day: 'numeric',
@@ -10,7 +8,6 @@ function formatearFecha(fecha) {
   });
 }
 
-// Tarjeta reutilizable que muestra una solicitud
 function TarjetaSolicitud({ solicitud }) {
   const { nombre, email, mascota, especie, fecha, descripcion, creadoEn } = solicitud;
 

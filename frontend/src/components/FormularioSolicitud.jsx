@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Mensaje from './Mensaje';
 import { crearSolicitud } from '../services/api';
-import { ESPECIES, hoyLocal, validarFormulario } from '../utils/validaciones';
+import { ESPECIES, LIMITES, fechaMaxima, hoyLocal, validarFormulario } from '../utils/validaciones';
 
 const VALORES_INICIALES = {
   nombre: '',
@@ -14,13 +14,11 @@ const VALORES_INICIALES = {
 };
 
 function FormularioSolicitud() {
-  // Estado del formulario
   const [datos, setDatos] = useState(VALORES_INICIALES);
   const [errores, setErrores] = useState({});
   const [enviando, setEnviando] = useState(false);
-  const [resultado, setResultado] = useState(null); // { tipo, texto }
+  const [resultado, setResultado] = useState(null);
 
-  // Actualiza el campo que cambió y borra su error
   function manejarCambio(e) {
     const { name, value } = e.target;
     setDatos({ ...datos, [name]: value });
@@ -30,18 +28,16 @@ function FormularioSolicitud() {
   }
 
   async function manejarEnvio(e) {
-    e.preventDefault(); // evita que la página se recargue
+    e.preventDefault();
     setResultado(null);
 
-    // 1. Validar en el cliente
     const nuevosErrores = validarFormulario(datos);
     setErrores(nuevosErrores);
     if (Object.keys(nuevosErrores).length > 0) {
       setResultado({ tipo: 'error', texto: 'Revisa los campos marcados en rojo.' });
-      return; // no se envía nada al servidor
+      return;
     }
 
-    // 2. Enviar a la API
     setEnviando(true);
     try {
       const creada = await crearSolicitud(datos);
@@ -49,9 +45,9 @@ function FormularioSolicitud() {
         tipo: 'exito',
         texto: `Solicitud registrada: ${creada.nombre} quiere adoptar a ${creada.mascota}.`,
       });
-      setDatos(VALORES_INICIALES); // limpia el formulario
+      setDatos(VALORES_INICIALES);
     } catch (error) {
-      setErrores(error.errores || {}); // errores que devolvió el servidor (400)
+      setErrores(error.errores || {});
       setResultado({ tipo: 'error', texto: error.message });
     } finally {
       setEnviando(false);
@@ -70,7 +66,7 @@ function FormularioSolicitud() {
       <div className="campo">
         <label htmlFor="nombre">Nombre del solicitante *</label>
         <input
-          id="nombre" name="nombre" type="text"
+          id="nombre" name="nombre" type="text" maxLength={LIMITES.nombre.max}
           value={datos.nombre} onChange={manejarCambio}
           placeholder="Ej.: María López"
         />
@@ -80,7 +76,7 @@ function FormularioSolicitud() {
       <div className="campo">
         <label htmlFor="email">Email *</label>
         <input
-          id="email" name="email" type="email"
+          id="email" name="email" type="email" maxLength={LIMITES.email.max}
           value={datos.email} onChange={manejarCambio}
           placeholder="nombre@correo.com"
         />
@@ -91,7 +87,7 @@ function FormularioSolicitud() {
         <div className="campo">
           <label htmlFor="mascota">Nombre de la mascota *</label>
           <input
-            id="mascota" name="mascota" type="text"
+            id="mascota" name="mascota" type="text" maxLength={LIMITES.mascota.max}
             value={datos.mascota} onChange={manejarCambio}
             placeholder="Ej.: Firulais"
           />
@@ -115,7 +111,7 @@ function FormularioSolicitud() {
         <input
           id="fecha" name="fecha" type="date"
           value={datos.fecha} onChange={manejarCambio}
-          min={hoyLocal()}
+          min={hoyLocal()} max={fechaMaxima()}
         />
         {errores.fecha && <small className="campo__error">{errores.fecha}</small>}
       </div>
@@ -123,11 +119,11 @@ function FormularioSolicitud() {
       <div className="campo">
         <label htmlFor="descripcion">¿Por qué quieres adoptar? *</label>
         <textarea
-          id="descripcion" name="descripcion" rows="4" maxLength="500"
+          id="descripcion" name="descripcion" rows="4" maxLength={LIMITES.descripcion.max}
           value={datos.descripcion} onChange={manejarCambio}
           placeholder="Cuéntanos sobre tu hogar y por qué esta mascota…"
         />
-        <small className="campo__ayuda">{datos.descripcion.length}/500</small>
+        <small className="campo__ayuda">{datos.descripcion.length}/{LIMITES.descripcion.max}</small>
         {errores.descripcion && <small className="campo__error">{errores.descripcion}</small>}
       </div>
 

@@ -1,26 +1,46 @@
 const fs = require('fs/promises');
 const path = require('path');
 
-// Ruta del archivo donde se guardan las solicitudes
 const ARCHIVO = path.join(__dirname, 'registros.json');
+const TEMPORAL = `${ARCHIVO}.tmp`;
 
-// Escribe la lista completa en el archivo JSON
 async function guardarRegistros(registros) {
-  await fs.writeFile(ARCHIVO, JSON.stringify(registros, null, 2), 'utf-8');
+  await fs.writeFile(TEMPORAL, JSON.stringify(registros, null, 2), 'utf-8');
+  await fs.rename(TEMPORAL, ARCHIVO);
 }
 
-// Lee la lista; si el archivo no existe, lo crea vacío
 async function leerRegistros() {
   try {
     const contenido = await fs.readFile(ARCHIVO, 'utf-8');
-    return JSON.parse(contenido);
+    if (!contenido.trim()) {
+      await guardarRegistros([]);
+      return [];
+    }
+    const registros = JSON.parse(contenido);
+    if (!Array.isArray(registros)) {
+      throw new Error('El archivo registros.json no contiene una lista.');
+    }
+    return registros;
   } catch (error) {
     if (error.code === 'ENOENT') {
       await guardarRegistros([]);
       return [];
     }
-    throw error; // otro error: lo maneja la ruta sin tumbar el servidor
+    throw error;
   }
 }
 
-module.exports = { leerRegistros, guardarRegistros };
+let cola = Promise.resolve();
+
+function agregarRegistro(nuevo) {
+  const tarea = cola.then(async () => {
+    const registros = await leerRegistros();
+    registros.push(nuevo);
+    await guardarRegistros(registros);
+    return nuevo;
+  });
+  cola = tarea.catch(() => {});
+  return tarea;
+}
+
+module.exports = { leerRegistros, guardarRegistros, agregarRegistro };

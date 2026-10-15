@@ -88,14 +88,25 @@ El servidor agrega `id` (UUID) y `creadoEn`. Si los datos son inválidos respond
 
 ## Validaciones (cliente y servidor)
 
+Las mismas reglas están en `frontend/src/utils/validaciones.js` y `backend/validators/validarSolicitud.js`.
+
 | Campo | Regla |
 |---|---|
-| nombre | Obligatorio, mínimo 3 caracteres |
-| email | Formato válido |
-| mascota | Obligatorio |
+| nombre | Obligatorio, 3 a 80 caracteres, solo letras y espacios |
+| email | Obligatorio, formato `usuario@dominio.ext`, sin puntos al inicio, al final ni seguidos |
+| mascota | Obligatorio, 2 a 40 caracteres, solo letras y espacios |
 | especie | Perro, Gato, Conejo, Ave u Otro |
-| fecha | Obligatoria, no puede ser anterior a hoy |
+| fecha | Obligatoria, debe existir en el calendario, desde hoy y como máximo dentro de un año |
 | descripcion | Entre 10 y 500 caracteres |
+
+Antes de guardar, el servidor quita espacios sobrantes y pasa el email a minúsculas.
+
+### Pruebas automáticas de la validación
+
+```bash
+cd backend
+npm test
+```
 
 ## Conexión React → API
 
@@ -104,7 +115,10 @@ Toda la comunicación está en `frontend/src/services/api.js`. La dirección de 
 ## Pruebas realizadas
 
 - Creación de solicitudes (201) y consulta (200)
-- Rechazo de datos inválidos (400) y de JSON mal formado (400) sin detener el servidor
+- Rechazo de datos inválidos (400): fechas inexistentes, pasadas o lejanas, emails mal escritos, nombres con números
+- Rechazo de JSON mal formado (400) sin detener el servidor
+- 20 registros enviados al mismo tiempo se guardan todos sin perder ninguno
+- 10 pruebas automáticas de la validación con `npm test`
 - Persistencia: tras reiniciar el backend, los registros siguen disponibles
 - Estados en la interfaz: cargando, lista vacía, confirmación y error de conexión
 - Diseño adaptable a pantallas pequeñas

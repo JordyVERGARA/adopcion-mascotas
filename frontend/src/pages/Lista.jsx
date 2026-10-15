@@ -8,9 +8,8 @@ function Lista() {
   const [solicitudes, setSolicitudes] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');
-  const [version, setVersion] = useState(0); // cambia para volver a consultar
+  const [version, setVersion] = useState(0);
 
-  // Consulta GET /registros al entrar y cada vez que cambia "version"
   useEffect(() => {
     let activo = true;
     obtenerSolicitudes()
