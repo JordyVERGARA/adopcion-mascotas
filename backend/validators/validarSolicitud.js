@@ -1,4 +1,4 @@
-const ESPECIES = ['Perro', 'Gato', 'Conejo', 'Ave', 'Otro'];
+const ESPECIES = ['Perro', 'Gato', 'Conejo','Hámster', 'Ave', 'Otro'];
 
 const LIMITES = {
   nombre: { min: 3, max: 80 },

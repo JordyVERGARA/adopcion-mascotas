@@ -1,4 +1,4 @@
-export const ESPECIES = ['Perro', 'Gato', 'Conejo', 'Ave', 'Otro'];
+export const ESPECIES = ['Perro', 'Gato', 'Conejo', 'Hámster', 'Ave', 'Otro'];
 
 export const LIMITES = {
   nombre: { min: 3, max: 80 },
