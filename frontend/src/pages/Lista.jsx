@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom';
 import TarjetaSolicitud from '../components/TarjetaSolicitud';
 import Mensaje from '../components/Mensaje';
 import { obtenerSolicitudes } from '../services/api';
+import { ESPECIES } from '../utils/validaciones';
 
 function Lista() {
   const [solicitudes, setSolicitudes] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');
   const [version, setVersion] = useState(0);
+  const [filtro, setFiltro] = useState('Todas');
 
   useEffect(() => {
     let activo = true;
@@ -24,6 +26,10 @@ function Lista() {
     setError('');
     setVersion((v) => v + 1);
   }
+
+  const filtradas = filtro === 'Todas'
+    ? solicitudes
+    : solicitudes.filter((s) => s.especie === filtro);
 
   return (
     <section>
@@ -51,12 +57,30 @@ function Lista() {
 
       {!cargando && !error && solicitudes.length > 0 && (
         <>
-          <p>{solicitudes.length} solicitud(es) registrada(s).</p>
-          <div className="lista">
-            {[...solicitudes].reverse().map((s) => (
-              <TarjetaSolicitud key={s.id} solicitud={s} />
-            ))}
+          <div className="filtro">
+            <label htmlFor="filtro">Filtrar por especie</label>
+            <select id="filtro" value={filtro} onChange={(e) => setFiltro(e.target.value)}>
+              <option value="Todas">Todas</option>
+              {ESPECIES.map((esp) => (
+                <option key={esp} value={esp}>{esp}</option>
+              ))}
+            </select>
           </div>
+
+          <p>Mostrando {filtradas.length} de {solicitudes.length} solicitud(es).</p>
+
+          {filtradas.length === 0 ? (
+            <Mensaje tipo="info">
+              No hay solicitudes de la especie {filtro}.{' '}
+              <button className="enlace" onClick={() => setFiltro('Todas')}>Ver todas</button>
+            </Mensaje>
+          ) : (
+            <div className="lista">
+              {[...filtradas].reverse().map((s) => (
+                <TarjetaSolicitud key={s.id} solicitud={s} />
+              ))}
+            </div>
+          )}
         </>
       )}
     </section>

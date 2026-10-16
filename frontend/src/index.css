@@ -231,9 +231,36 @@ a { color: var(--primario); }
   padding-top: 0.6rem;
 }
 
+.filtro {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.filtro label { font-weight: 600; }
+
+.filtro select {
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  font: inherit;
+  min-width: 180px;
+}
+
+.filtro select:focus {
+  outline: 2px solid var(--primario);
+  outline-offset: 1px;
+}
+
 @media (max-width: 600px) {
   .fila { grid-template-columns: 1fr; }
   .menu { justify-content: center; }
   .formulario, .inicio { padding: 1.1rem; }
   .inicio__acciones .boton { width: 100%; text-align: center; }
+  .lista__encabezado .boton { width: 100%; }
+  .filtro { flex-direction: column; align-items: stretch; gap: 0.35rem; }
+  .filtro select { width: 100%; min-width: 0; }
 }
