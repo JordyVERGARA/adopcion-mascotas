@@ -101,7 +101,7 @@ Las mismas reglas están en `frontend/src/utils/validaciones.js` y `backend/vali
 
 Antes de guardar, el servidor quita espacios sobrantes y pasa el email a minúsculas.
 
-### Pruebas automáticas de la validación
+### Pruebas automáticas de la API y las validaciones
 
 ```bash
 cd backend

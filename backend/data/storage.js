@@ -1,7 +1,7 @@
 const fs = require('fs/promises');
 const path = require('path');
 
-const ARCHIVO = path.join(__dirname, 'registros.json');
+const ARCHIVO = process.env.ADOPCION_REGISTROS_FILE || path.join(__dirname, 'registros.json');
 const TEMPORAL = `${ARCHIVO}.tmp`;
 
 async function guardarRegistros(registros) {
