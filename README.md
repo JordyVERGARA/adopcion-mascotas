@@ -8,10 +8,10 @@ Flujo completo: **formulario en React → petición HTTP → API en Express → 
 
 | Integrante | Responsabilidad |
 |---|---|
-| German Steven Riera Rebolledo | |
-| Jordy Rodrigo Vergara Morales | |
-| Anthony Steven Pataron Naula| |
-| Héctor Guillermo Tenelema Iza
+| Jordy Rodrigo Vergara Morales | Backend (API Express y archivo JSON) y estructura del frontend |
+| German Steven Riera Rebolledo | Validación en cliente y servidor, guardado seguro y pruebas automáticas |
+| Anthony Steven Pataron Naula | Pruebas de la API, verificación de persistencia y documentación |
+| Héctor Guillermo Tenelema Iza | Filtro por especie en la lista y vista en celular |
 
 ## Tecnologías
 
@@ -121,4 +121,35 @@ Toda la comunicación está en `frontend/src/services/api.js`. La dirección de 
 - 10 pruebas automáticas de la validación con `npm test`
 - Persistencia: tras reiniciar el backend, los registros siguen disponibles
 - Estados en la interfaz: cargando, lista vacía, confirmación y error de conexión
+- Filtro por especie en la lista de solicitudes
 - Diseño adaptable a pantallas pequeñas
+
+## Cómo probar la API con curl
+
+Con el backend encendido (`npm run dev` en la carpeta `backend`), desde Git Bash:
+
+**Consultar las solicitudes (200)**
+
+```bash
+curl http://localhost:3001/registros
+```
+
+**Crear una solicitud válida (201)**
+
+```bash
+curl -X POST http://localhost:3001/registros -H "Content-Type: application/json" -d '{"nombre":"Maria Lopez","email":"maria@correo.com","mascota":"Luna","especie":"Gato","fecha":"2026-11-20","descripcion":"Tengo patio y tiempo para cuidarla"}'
+```
+
+**Enviar datos inválidos (400)**
+
+```bash
+curl -X POST http://localhost:3001/registros -H "Content-Type: application/json" -d '{"nombre":"Jo3","email":"malo"}'
+```
+
+**Comprobar la persistencia**
+
+1. Crear una solicitud con el comando anterior.
+2. Detener el backend con `Ctrl + C` y volver a iniciarlo con `npm run dev`.
+3. Consultar otra vez con `curl http://localhost:3001/registros`: la solicitud sigue guardada.
+
+> Nota: la fecha de la solicitud debe ser desde hoy y como máximo dentro de un año; si la del ejemplo ya pasó, cámbiala por una fecha futura.
